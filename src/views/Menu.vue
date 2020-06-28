@@ -132,7 +132,7 @@
                                 <div class="column"></div>
                             </div>
 
-                            <pre>{{subMenuFormData}}</pre>
+                            <!--                            <pre>{{subMenuFormData}}</pre>-->
 
                             <div class="is-clearfix mt-5">
                                 <button @click.prevent="closeSideMenu" class="button is-dark is-pulled-left">Cancel
@@ -165,6 +165,7 @@
     import {mapState} from "vuex";
 
     export default {
+        name: 'Menu',
         components: {Debug},
         data() {
             return {
@@ -180,7 +181,6 @@
                 selectedItemData: null,
                 // Holds the choices made by the user
                 subMenuFormData: {
-                    data: null,
                     sideMeal: null,
                     meat: null,
                     drink: null
@@ -221,14 +221,17 @@
 
             onSideMealSelect(item) {
                 this.subMenuFormData.sideMeal = item;
+                this.$forceUpdate();
             },
 
             onMeatSelect(item) {
                 this.subMenuFormData.meat = item;
+                this.$forceUpdate();
             },
 
             onDrinkSelect(item) {
                 this.subMenuFormData.drink = item;
+                this.$forceUpdate();
             },
 
             /**
@@ -237,10 +240,12 @@
              * And closeSideMenu which will also rest the subMenuFormData
              */
             addToCart() {
-                // Add current selected item to subMenuFormData before adding to cart
-                this.subMenuFormData.data = this.selectedItemData;
                 // Add subMenuFormData to cart
-                this.$store.commit('addDataToCart', this.subMenuFormData);
+                this.$store.commit('addDataToCart', {
+                    ...this.subMenuFormData,
+                    // Add current selected item to subMenuFormData before adding to cart
+                    data: this.selectedItemData
+                });
                 // close side menu.
                 this.closeSideMenu();
                 // Show notification

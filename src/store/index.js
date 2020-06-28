@@ -1,5 +1,5 @@
-import Vue from 'vue'
-import Vuex from 'vuex'
+import Vue from 'vue';
+import Vuex from 'vuex';
 import BrowserStorage from "@trapcode/browser-storage";
 
 // Add Vuex
@@ -17,7 +17,7 @@ export default new Vuex.Store({
         cart: appSessionStorage.getArray('cart', []),
 
         // controls cart modal visibility
-        showCartModal: true
+        showCartModal: false
     },
     mutations: {
         toggleCartModal(state) {
