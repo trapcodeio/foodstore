@@ -1,18 +1,22 @@
 <template>
-  <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
-  </div>
+    <section class="hero is-warning is-fullheight">
+        <div class="hero-body has-text-centered" style="margin-top: -20vh">
+            <div class="container">
+                <h1 class="title">
+                    Get your fast food really fast.....
+                </h1>
+                <div class="mt-2">
+                    <router-link :to="{name: 'menu'}" class="button is-large has-text-weight-bold has-text-danger">ORDER
+                        NOW
+                    </router-link>
+                </div>
+            </div>
+        </div>
+    </section>
 </template>
 
 <script>
-// @ is an alias to /src
-import HelloWorld from '@/components/HelloWorld.vue'
-
-export default {
-  name: 'Home',
-  components: {
-    HelloWorld
-  }
-}
+    export default {
+        name: 'Home',
+    }
 </script>
