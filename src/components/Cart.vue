@@ -36,10 +36,39 @@
                         </tbody>
                     </table>
 
+                    <div class="my-5">
+                        <div class="columns">
+                            <div class="column is-narrow">
+                                <div class="field has-addons">
+                                    <div class="control">
+                                        <input v-model="couponCode" class="input" type="text" placeholder="Coupon Code">
+                                    </div>
+                                    <div class="control">
+                                        <button @click.prevent="redeemCoupon" class="button">Apply</button>
+                                    </div>
+                                </div>
+                                <p v-if="useCouponPrice" class="has-text-info is-size-7">
+                                    95% off coupon ({{couponCode}}) applied.
+                                    <a @click.prevent="removeCoupon" class="has-text-danger">remove</a>
+                                </p>
+                            </div>
+                            <div class="column"></div>
+                            <div class="column is-narrow">
+                                <div class="h3 is-size-5">
+                                    <strong class="has-text-grey">Total:</strong> N{{totalAmount.toLocaleString()}}
+                                </div>
+                                <div class="h3 is-size-6">
+                                    <strong class="has-text-grey">Delivery fee:</strong> N150
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                     <div class="mt-5 is-clearfix">
                         <button @click="toggleCartModal" class="is-pulled-left button is-uppercase is-dark">Close
                         </button>
-                        <button @click="checkOut" class="is-pulled-right button is-uppercase is-warning has-text-weight-bold">Checkout
+                        <button @click="checkOut"
+                                class="is-pulled-right button is-uppercase is-warning has-text-weight-bold">Checkout
                         </button>
                     </div>
                 </template>
@@ -58,9 +87,29 @@
     import {mapState} from "vuex";
 
     export default {
+
+        data() {
+            return {
+                couponCode: '950meals',
+                useCouponPrice: true
+            }
+        },
         computed: {
             // Map cart && showCartModal state to this component
-            ...mapState(['cart', 'showCartModal'])
+            ...mapState(['cart', 'showCartModal']),
+
+            totalAmount() {
+                const eachMeal = 950;
+                let totalAmount = eachMeal * this.cart.length;
+
+                // calculate price if useCouponPrice
+                if (this.useCouponPrice) {
+                    const percentageOff = (totalAmount / 100) * 95;
+                    totalAmount -= percentageOff;
+                }
+
+                return totalAmount;
+            }
         },
 
         methods: {
@@ -74,8 +123,28 @@
                 this.$store.commit('removeFromCart', itemIndex);
             },
 
-            checkOut(){
+            checkOut() {
+                // on checkout save couponCode and total price.
+                this.$store.commit('updateCartData', {
+                    coupon: this.useCouponPrice ? this.couponCode : false,
+                    totalAmount: this.totalAmount
+                });
+
                 alert('Now all you need to do is send this cart data to server and process the order.');
+            },
+
+            redeemCoupon() {
+                // validate coupon
+                if (this.couponCode !== '950meals') {
+                    alert("Incorrect coupon.")
+                }
+
+                this.useCouponPrice = true;
+            },
+
+            removeCoupon() {
+                this.couponCode = null;
+                this.useCouponPrice = false;
             }
         }
     }
