@@ -23,7 +23,7 @@ export default new Vuex.Store({
         }),
 
         // controls cart modal visibility
-        showCartModal: true
+        showCartModal: false
     },
     mutations: {
         toggleCartModal(state) {
